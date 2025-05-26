@@ -34,6 +34,7 @@ class Ball:
             self.velo.x = self.velo.x * boost
         else:
             self.velo.x = self.velo.x + boost
+            
 
     def boostY(self, boost):
         if self.velo.y != 0:
@@ -44,11 +45,15 @@ class Ball:
     def setMass(self, mass):
         self.mass = mass
 
+    def mouseSub(self, mousePos):
+        return mousePos.pointBetween(self.pos).mult(1)
+
+    def setVeloOffMouse(self, mousePos):
+        self.velo = self.mouseSub(mousePos)
+
+
 
     def update(self, thickness):
-        
-
-
         widthDelta = self.width - self.radius
         heightDelta = self.height - self.radius
         radiusDelta = self.radius + thickness

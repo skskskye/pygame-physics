@@ -5,11 +5,14 @@ import random
 
 FPS = 60 #fps
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 LINE_THICKNESS = 10
-WIDTH = 600
-HEIGHT = 600
+WIDTH = 1800
+HEIGHT = 800
 BOOST = 1.5
+
+lastClick = False
 
 color = [0, 0, 0]
 cycle = False
@@ -21,7 +24,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("physics :3")
 font = pygame.font.Font(None, 36)
 
-ball = Ball(0, 0, 25, 255, 255, 255, 9.8, WIDTH - LINE_THICKNESS, HEIGHT - LINE_THICKNESS, (1/FPS), "bounce")
+ball = Ball(500, 500, 25, 20, 20, 255, 9.8, WIDTH - LINE_THICKNESS, HEIGHT - LINE_THICKNESS, (1/FPS), "bounce")
 ball.setVelo(Vector2(400, 20))
 running = True
 
@@ -29,14 +32,23 @@ print(pygame.display.get_driver())
 
 want = input("want rainbow, Yes or type literally anythinge else dont use this feature its terrible lol: ")
 
+
+
+
+
+
 while running:
-    print("FAGGOT")
-
-
     
- 
+
+
+
+
+
+
+
+
     if want.upper() == "YES":
-#this is not a rainbow but it kinda wrosk i do not care to fix it lol
+        #this is not a rainbow but it kinda wrosk i do not care to fix it lol
         if color[2] < 200 and cycle == False:
             color[2] += 1
         elif color[1] < 200 and cycle == False: 
@@ -54,7 +66,29 @@ while running:
         else:
             cycle = False
 
+
+    
+
     screen.fill((color[0], color[1], color[2]))
+
+    mousePos = pygame.mouse.get_pos()
+    mousePos2 = Vector2(mousePos[0], mousePos[1])
+
+    isLeftClickDown = pygame.mouse.get_pressed()[0] # getting the mouse click of the left button 
+    
+    if lastClick == True and isLeftClickDown == False:
+        #print(f"BEFORE SUBTRACTION: x {mousePos2.x} y {mousePos2.y}")
+        ball.setVeloOffMouse(mousePos2)
+    
+    if pygame.mouse.get_pressed()[0]:
+        subMouse = ball.mouseSub(mousePos2)
+        pygame.draw.line(screen, [175, 175, 220], [mousePos2.x, mousePos2.y], [ball.pos.x, ball.pos.y], 4)
+        lastClick = True
+    else:
+        lastClick = False
+    
+        
+
     pygame.draw.rect(screen, (30, 30, 30), (0, 0, WIDTH, HEIGHT), LINE_THICKNESS)
     yVelo = ball.velo.y
     xVelo = ball.velo.x
@@ -66,6 +100,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 ball.boostY(BOOST)
